@@ -1,325 +1,175 @@
 # 💼 Sistema de Compras y Ventas
 
-> Sistema integral de gestión de transacciones comerciales con PostgreSQL, Laravel y arquitectura optimizada para el control de flujo de efectivo diario.
+<div align="center">
 
-![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=flat-square&logo=laravel)
-![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=flat-square&logo=php)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-336791?style=flat-square&logo=postgresql)
-![Tailwind](https://img.shields.io/badge/Tailwind-4.x-06B6D4?style=flat-square&logo=tailwindcss)
-![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
+[![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
+[![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://php.net)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://postgresql.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.x-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Livewire](https://img.shields.io/badge/Livewire-3.x-FB70A9?style=for-the-badge&logo=livewire&logoColor=white)](https://livewire.laravel.com)
 
-## 🚀 Características Principales
+**Sistema integral de gestión de transacciones comerciales para el control de flujo de efectivo diario.**
 
-### 💰 **Control Financiero**
-- **Saldo Diario Automático**: Cálculo en tiempo real del flujo de efectivo
-- **Reportes Temporales**: Vista semanal y mensual de ingresos/egresos
-- **Transacciones Flexibles**: Compras y ventas con datos JSONB optimizados
+[Características](#-características) · [Arquitectura](#-arquitectura) · [Instalación](#-instalación)
 
-### 🏗️ **Arquitectura Moderna**
-- **PostgreSQL con JSONB**: Flexibilidad máxima para datos de facturas y referencias
-- **Índices GIN**: Búsquedas ultra-rápidas en campos JSON
-- **Folios Automáticos**: Generación secuencial inteligente
-- **Sesiones en BD**: Escalabilidad y persistencia garantizada
+</div>
 
-### 🔐 **Seguridad Empresarial**
-- **Autenticación Robusta**: Sistema seguro con encriptación de sesiones
-- **Middleware Protegido**: Rutas seguras para panel administrativo
-- **Validación CSRF**: Protección contra ataques de falsificación
+---
 
-### 📱 **Interfaz Responsiva**
-- **Tailwind CSS 4.x**: Diseño moderno y adaptable
-- **Dashboard Intuitivo**: Vista clara de métricas financieras
-- **UX Optimizada**: Navegación fluida y eficiente
+## 💡 ¿Qué es este sistema?
 
-## 🛠️ Stack Tecnológico
+Sistema completo para la gestión de compras y ventas de una empresa, permitiendo el registro diario de ingresos y egresos, control de contactos (clientes/proveedores), gestión de facturas con soporte para archivos adjuntos, y un dashboard financiero con reportes en tiempo real.
 
-| Componente | Tecnología | Versión |
-|------------|------------|---------||
-| **Backend** | Laravel | 12.x |
-| **Base de Datos** | PostgreSQL | 15+ |
-| **Frontend** | Livewire + Volt | 2.x |
-| **Estilos** | Tailwind CSS | 4.x |
-| **Testing** | Pest | 3.x |
-| **Runtime** | PHP | 8.2+ |
+> 🎯 **Objetivo:** Automatizar el control financiero diario, reemplazando hojas de cálculo por un sistema robusto con persistencia en base de datos.
 
-## 📋 Requisitos del Sistema
+---
 
-### **Mínimos**
-- **PHP** 8.2 o superior
-- **PostgreSQL** 15+
-- **Composer** 2.x
-- **Node.js** 18+ y npm
+## ✨ Características
 
-### **Recomendados**
-- **Laravel Herd** (para desarrollo local)
-- **PostgreSQL** con extensiones JSON
-- **Redis** (para cache en producción)
+### 💰 Control Financiero
+- **Saldo Diario Automático:** Cálculo en tiempo real de ingresos, egresos y saldo neto.
+- **Reportes Temporales:** Vista semanal y mensual con acumulados.
+- **Folios Automáticos:** Generación secuencial `ING-001-2025` / `EGR-001-2025`.
 
-## ⚡ Instalación Rápida
+### 👥 Gestión de Contactos
+- CRUD completo de contactos con **soft deletes**.
+- Tipos: Cliente, Proveedor o Ambos.
+- Búsqueda por nombre, RFC o email.
+- Validación de unicidad en nombres.
 
-### 1️⃣ **Clonar Repositorio**
+### 📝 Transacciones
+- Registro de compras (egresos) y ventas (ingresos).
+- Campos JSONB flexibles para referencias y datos de factura.
+- Soporte para múltiples métodos de pago.
+- Sistema de archivos adjuntos para facturas/documentos.
+
+### 📊 Dashboard
+- Saldo del día, semana y mes.
+- Últimas 10 transacciones recientes.
+- Interfaz limpia con Tailwind CSS y componentes Flux.
+
+---
+
+## 🏗️ Arquitectura
+
+```text
+app/
+├── Http/Controllers/
+│   ├── AuthController.php          # Autenticación personalizada
+│   └── DashboardController.php     # Métricas financieras
+├── Livewire/
+│   ├── ContactosIndex.php          # CRUD de contactos
+│   ├── TransaccionesIndex.php      # CRUD de transacciones
+│   └── Forms/
+│       └── ContactoForm.php        # Formulario reutilizable
+└── Models/
+    ├── Contacto.php                # SoftDeletes, scopes, relaciones
+    ├── Transaccion.php             # Folios automáticos, JSONB, archivos
+    └── MetodoPago.php              # Catálogo de métodos de pago
+
+database/migrations/
+├── contactos                       # tipo, nombre, email, teléfono, RFC
+├── metodos_pago                    # nombre, activo
+└── transacciones                   # folio, tipo, fecha, contacto_id,
+                                    # referencia_datos (jsonb),
+                                    # factura_datos (jsonb),
+                                    # factura_archivos (jsonb),
+                                    # metodo_pago_id, total, observaciones
+```
+
+### Tech Stack
+- **Laravel 12.x** — Framework PHP
+- **Livewire + Volt** — Componentes reactivos sin JavaScript
+- **Tailwind CSS 4.x** — Estilos utilitarios
+- **PostgreSQL 15+** — Base de datos con JSONB
+- **Playwright** — Testing end-to-end
+- **Pest PHP** — Testing unitario
+
+---
+
+## 🚀 Instalación
+
+### Requisitos
+- PHP `^8.2`
+- PostgreSQL `15+`
+- Composer `2.x`
+- Node.js `18+`
+
 ```bash
-git clone https://github.com/ederjgb94/sistema-compras-ventas.git
+# 1. Clonar
+git clone https://github.com/ebravo-dev/sistema-compras-ventas.git
 cd sistema-compras-ventas
-```
 
-### 2️⃣ **Configurar Dependencias**
-```bash
-# Instalar dependencias PHP
+# 2. Dependencias
 composer install
-
-# Instalar dependencias Node.js
 npm install
-```
 
-### 3️⃣ **Configurar Base de Datos**
-```bash
-# Crear base de datos PostgreSQL
-createdb sistema_compras_ventas
-
-# Copiar y configurar variables de entorno
+# 3. Configuración
 cp .env.example .env
-```
-
-### 4️⃣ **Configurar .env**
-```env
-# Base de Datos
-DB_CONNECTION=pgsql
-DB_HOST=127.0.0.1
-DB_PORT=5432
-DB_DATABASE=sistema_compras_ventas
-DB_USERNAME=tu_usuario
-DB_PASSWORD=tu_password
-
-# Sesiones (Recomendado para producción)
-SESSION_DRIVER=database
-SESSION_ENCRYPT=true
-```
-
-### 5️⃣ **Migrar y Sembrar**
-```bash
-# Generar clave de aplicación
 php artisan key:generate
 
-# Ejecutar migraciones
+# 4. Base de datos
+# Crear DB PostgreSQL y configurar .env
 php artisan migrate
-
-# Sembrar datos iniciales
 php artisan db:seed
 
-# Crear enlace de storage
-php artisan storage:link
-```
-
-### 6️⃣ **Iniciar Desarrollo**
-```bash
-# Opción 1: Comando único (recomendado)
+# 5. Iniciar
 composer run dev
-
-# Opción 2: Comandos separados
-php artisan serve
-npm run dev
 ```
 
-## 🗄️ Estructura de Base de Datos
+### Credenciales por defecto
+| Usuario | Email | Password |
+|---------|-------|----------|
+| Admin | admin@admin.com | admin |
 
-### **📊 Esquema Optimizado**
+---
+
+## 🗄️ Esquema de Base de Datos
 
 ```sql
--- Contactos (Clientes/Proveedores)
+-- Contactos (Soft Deletes)
 contactos
-├── id (bigint, PK)
-├── tipo (enum: cliente|proveedor|ambos)
-├── nombre (varchar, único)
-├── email (varchar, nullable)
-├── telefono (varchar, nullable)
-├── direccion (text, nullable)
-├── rfc (varchar, nullable)
-├── activo (boolean, default: true)
+├── id, tipo, nombre, email, telefono, direccion, rfc
+├── activo (boolean)
+├── deleted_at (soft delete)
 └── timestamps
 
--- Métodos de Pago
-metodos_pago
-├── id (bigint, PK)
-├── nombre (varchar, único)
-├── activo (boolean, default: true)
-└── timestamps
-
--- Transacciones (Core del Sistema)
+-- Transacciones
 transacciones
-├── id (bigint, PK)
-├── folio (varchar, único, auto-generado)
-├── tipo (enum: compra|venta)
-├── fecha (date)
-├── contacto_id (FK → contactos)
-├── referencia_tipo (varchar, nullable)
-├── referencia_nombre (varchar, nullable)
-├── referencia_datos (jsonb, nullable) -- Flexibilidad total
-├── factura_tipo (varchar, nullable)
-├── factura_numero (varchar, nullable)
-├── factura_datos (jsonb, nullable) -- Campos dinámicos
-├── factura_archivos (jsonb, nullable) -- Rutas de archivos
-├── metodo_pago_id (FK → metodos_pago)
-├── referencia_pago (varchar, nullable)
-├── total (decimal 15,2)
-├── observaciones (text, nullable)
+├── id, folio (único), tipo (ingreso/egreso), fecha
+├── contacto_id (FK), metodo_pago_id (FK)
+├── referencia_tipo, referencia_nombre, referencia_datos (jsonb)
+├── factura_tipo, factura_numero, factura_datos (jsonb), factura_archivos (jsonb)
+├── referencia_pago, total (decimal 15,2), observaciones
 └── timestamps
 
--- Índices GIN para JSONB (Búsquedas Ultra-Rápidas)
+-- Índices GIN para JSONB
 CREATE INDEX idx_referencia_datos_gin ON transacciones USING gin(referencia_datos);
 CREATE INDEX idx_factura_datos_gin ON transacciones USING gin(factura_datos);
 ```
 
-### **🔗 Relaciones Clave**
-- `transacciones.contacto_id` → `contactos.id`
-- `transacciones.metodo_pago_id` → `metodos_pago.id`
-- **Soft Deletes**: Integridad histórica preservada
-- **Timestamps**: Auditoría completa de cambios
-
-## 👤 Credenciales por Defecto
-
-| Usuario | Email | Password |
-|---------|-------|----------|
-| **Administrador** | admin@admin.com | admin |
-
-> ⚠️ **Importante**: Cambiar credenciales en producción
-
-## 🎯 Funcionalidades Implementadas
-
-### ✅ **Módulo de Autenticación**
-- Login/logout seguro
-- Sesiones persistentes en BD
-- Middleware de protección
-- Encriptación de sesiones
-
-### ✅ **Dashboard Financiero**
-- **Saldo del Día**: Ingresos - Egresos automático
-- **Saldo Semanal**: Últimos 7 días
-- **Saldo Mensual**: Mes actual
-- **Últimas Transacciones**: Vista rápida de actividad reciente
-
-### ✅ **Base de Datos Flexible**
-- Campos JSONB para máxima adaptabilidad
-- Índices optimizados para consultas rápidas
-- Relaciones bien definidas
-- Migraciones versionadas
-
-### ✅ **Arquitectura Escalable**
-- Modelos Eloquent con relaciones
-- Scopes para consultas complejas
-- Seeders para datos iniciales
-- Estructura modular
-
-## 🚧 Roadmap de Desarrollo
-
-### **🔄 Próximas Funcionalidades** (Issue #2)
-
-#### **📝 CRUDs Completos**
-- [ ] Gestión de Contactos (Crear/Editar/Eliminar)
-- [ ] Gestión de Métodos de Pago
-- [ ] Gestión de Transacciones con formularios dinámicos
-
-#### **📊 Reportes Avanzados**
-- [ ] Reportes por rango de fechas
-- [ ] Gráficos de tendencias
-- [ ] Exportación a Excel/PDF
-- [ ] Análisis por contacto/método de pago
-
-#### **🔍 Búsquedas Inteligentes**
-- [ ] Filtros avanzados en transacciones
-- [ ] Búsqueda full-text en JSONB
-- [ ] Autocompletado en formularios
-
-#### **📁 Gestión de Archivos**
-- [ ] Subida de facturas/documentos
-- [ ] Previsualización de archivos
-- [ ] Organización por carpetas
-
-#### **⚡ Optimizaciones**
-- [ ] Cache Redis para reportes
-- [ ] Paginación optimizada
-- [ ] API REST para integraciones
+---
 
 ## 🧪 Testing
 
 ```bash
-# Ejecutar todas las pruebas
+# Tests PHP
 composer test
 
-# Ejecutar pruebas específicas
+# Tests E2E con Playwright
+npx playwright test
+
+# Tests específicos
 php artisan test tests/Feature/DashboardTest.php
-
-# Testing con cobertura
-php artisan test --coverage
 ```
-
-### **📋 Cobertura Actual**
-- ✅ Autenticación
-- ✅ Dashboard y cálculos
-- ✅ Modelos y relaciones
-- 🔄 CRUDs (pendiente Issue #2)
-
-## 🚀 Despliegue
-
-### **🐳 Docker (Recomendado)**
-```bash
-# Usando Laravel Sail
-./vendor/bin/sail up -d
-./vendor/bin/sail artisan migrate --seed
-```
-
-### **☁️ Producción**
-```bash
-# Optimizar para producción
-composer install --optimize-autoloader --no-dev
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-npm run build
-```
-
-## 🤝 Contribución
-
-### **🔄 Workflow de Desarrollo**
-1. **Fork** del repositorio
-2. **Crear rama**: `feature/descripcion` o `fix/descripcion`
-3. **Desarrollar** con tests incluidos
-4. **Pull Request** hacia `dev`
-5. **Review** y merge automático si CI/CD pasa
-
-### **📏 Estándares de Código**
-- **PSR-12** para PHP
-- **Conventional Commits** para mensajes
-- **Tests obligatorios** para nuevas funcionalidades
-- **Documentación** actualizada
-
-## 📜 Licencia
-
-Este proyecto está bajo la licencia **MIT**. Ver archivo [LICENSE](LICENSE) para más detalles.
-
-## 🆘 Soporte
-
-### **🐛 Reportar Problemas**
-- [Issues en GitHub](https://github.com/ederjgb94/sistema-compras-ventas/issues)
-- Incluir logs y pasos para reproducir
-
-### **💬 Comunidad**
-- [Discusiones](https://github.com/ederjgb94/sistema-compras-ventas/discussions)
-- Email: tu-email@dominio.com
-
-## 🙏 Agradecimientos
-
-- **Laravel Team** por el framework excepcional
-- **Comunidad PostgreSQL** por la robustez de la BD
-- **Tailwind Labs** por el sistema de diseño
-- **Livewire Team** por la reactividad sin JavaScript
 
 ---
 
-<p align="center">
-  <strong>Hecho con ❤️ para optimizar la gestión financiera empresarial</strong>
-</p>
+## 📄 Licencia
 
-<p align="center">
-  <a href="#-sistema-de-compras-y-ventas">⬆️ Volver arriba</a>
-</p>
+Proyecto privado de gestión comercial.  
+Desarrollado por [Eder J. G. Bravo](https://github.com/ebravo-dev).
+
+---
+
+> *"Hecho para llevar el control financiero al siguiente nivel."* 💰
